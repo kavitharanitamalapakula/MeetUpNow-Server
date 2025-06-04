@@ -1,4 +1,6 @@
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
+import admin from "../firebase.js";
 
 export const getUserProfile = async (req, res) => {
   try {
@@ -22,5 +24,37 @@ export const updateUserProfile = async (req, res) => {
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: "Failed to update profile" });
+  }
+};
+
+export const googleLogin = async (req, res) => {
+  const { username, email, avatar } = req.body;
+
+  if (!email) return res.status(400).json({ error: "Email is required" });
+
+  try {
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user
+      user = new User({
+        username,
+        email,
+        avatar,
+        isGoogleAccount: true
+      });
+      await user.save();
+    }
+    // console.log(user._id)
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    // console.log(token)
+    res.status(200).json({
+      message: "User login successful",
+      user,
+      token
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };

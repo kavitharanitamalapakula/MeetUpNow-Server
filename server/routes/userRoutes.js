@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import { getUserProfile, updateUserProfile } from "../controllers/userController.js";
+import { getUserProfile, updateUserProfile, googleLogin } from "../controllers/userController.js";
 import dotenv from "dotenv"
 dotenv.config()
 const router = express.Router();
@@ -35,6 +35,8 @@ router.post("/signin", async (req, res) => {
   });
 });
 
+
+router.post("/google-login", googleLogin);
 router.get("/profile/:id", getUserProfile);
 router.put("/profile/:id", updateUserProfile);
 

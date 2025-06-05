@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import admin from "../firebase.js";
+import bcrypt from "bcryptjs";
 
 export const getUserProfile = async (req, res) => {
   try {
@@ -24,6 +25,26 @@ export const updateUserProfile = async (req, res) => {
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: "Failed to update profile" });
+  }
+};
+
+export const updateUserPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password) return res.status(400).json({ message: "Password is required" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { password: hashedPassword },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+    res.json({ message: "Password updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update password" });
   }
 };
 

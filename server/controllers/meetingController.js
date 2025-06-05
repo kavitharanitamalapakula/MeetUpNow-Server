@@ -110,6 +110,28 @@ export const addParticipant = async (req, res) => {
         res.status(500).json({ message: 'Error adding participant', error });
     }
 };
+
+// end meeting by host
+export const endMeetByHost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const meeting = await Meeting.findOne({ meetingId: id });
+        if (!meeting) {
+            return res.status(404).json({ message: 'Meeting not found' });
+        }
+
+        if (meeting.host !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        meeting.isActive = false;
+        meeting.status = "ended";
+        await meeting.save();
+        res.status(200).json({ message: "Meeting ended successfully", data: meeting });
+    } catch (error) {
+        res.status(500).json({ message: 'Error ending meeting', error: error.message });
+    }
+};
 // start instant meeting
 export const startMeetByHost = async (req, res) => {
     try {
@@ -124,6 +146,7 @@ export const startMeetByHost = async (req, res) => {
         }
 
         meeting.isActive = true;
+        meeting.status = "active";
         await meeting.save();
         res.status(200).json({ message: "success", data: meeting });
     } catch (error) {

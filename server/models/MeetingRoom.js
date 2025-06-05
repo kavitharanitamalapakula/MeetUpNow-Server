@@ -8,7 +8,7 @@ const MeetingSchema = new mongoose.Schema({
     host: { type: String, required: true },
     participants: [{ type: String }],
     createdAt: { type: Date, default: Date.now },
-    isActive: { type: Boolean, default: false }
+    status: { type: String, enum: ["upcoming", "active", "ended"], default: "upcoming" }
 }, { strict: false });
 
 export default mongoose.model('Meeting', MeetingSchema);

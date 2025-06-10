@@ -20,6 +20,15 @@ mongoose.connect(process.env.MONGO_URI)
   })
   .catch(console.error);
 
+app.get("/test", (req, res) => {
+  try {
+    res.send("hello running succesfully")
+  } catch (err) {
+    res.status(500).json(err)
+  }
+
+})
+
 // API Routes
 app.use("/users", userRoutes);
 app.use("/meetings", meetingRoutes);

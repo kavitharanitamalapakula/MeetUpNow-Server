@@ -120,11 +120,9 @@ export const endMeetByHost = async (req, res) => {
         if (!meeting) {
             return res.status(404).json({ message: 'Meeting not found' });
         }
-
         if (meeting.host !== req.user._id.toString()) {
             return res.status(403).json({ message: '"You are not the host of this meeting' });
         }
-
         meeting.status = false;
         meeting.status = "ended";
         await meeting.save();

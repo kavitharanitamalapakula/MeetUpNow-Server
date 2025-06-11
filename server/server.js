@@ -7,7 +7,9 @@ import meetingRoutes from "./routes/meetingRoutes.js"
 dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(cors(
+  { origin: ["https://meet-up-now-one.vercel.app", "http://localhost:5173"], methods: ["GET", "POST", "PUT", "PATCH", "DELETE"] }
+));
 app.use(express.json());
 
 // MongoDB connection

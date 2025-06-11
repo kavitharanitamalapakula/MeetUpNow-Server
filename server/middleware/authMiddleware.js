@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config()
 
 const protect = async (req, res, next) => {
+    // console.log(req.headers)
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer")) {
         return res.status(401).json({ message: "No token provided" });

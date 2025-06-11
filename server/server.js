@@ -14,9 +14,6 @@ app.use(express.json());
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
-    app.listen(process.env.PORT, () =>
-      console.log(`Server running on http://localhost:${process.env.PORT}`)
-    );
   })
   .catch(console.error);
 
@@ -32,3 +29,7 @@ app.get("/test", (req, res) => {
 // API Routes
 app.use("/users", userRoutes);
 app.use("/meetings", meetingRoutes);
+
+app.listen(process.env.PORT, () =>
+  console.log(`Server running on http://localhost:${process.env.PORT}`)
+);

@@ -91,10 +91,11 @@ export const addParticipant = async (req, res) => {
         const { id } = req.params;
 
         const meeting = await Meeting.findOne({ meetingId: id });
+        // console.log(meeting)
         if (!meeting) {
             return res.status(404).json({ message: 'Meeting not found' });
         }
-        if (!meeting.isActive) {
+        if (!meeting.status) {
             return res.status(404).json({ message: 'Meeting not started yet' });
         }
 

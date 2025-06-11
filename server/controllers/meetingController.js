@@ -122,7 +122,7 @@ export const endMeetByHost = async (req, res) => {
         }
 
         if (meeting.host !== req.user._id.toString()) {
-            return res.status(403).json({ message: 'Access denied' });
+            return res.status(403).json({ message: '"You are not the host of this meeting' });
         }
 
         meeting.isActive = false;

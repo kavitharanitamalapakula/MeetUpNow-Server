@@ -125,7 +125,7 @@ export const endMeetByHost = async (req, res) => {
             return res.status(403).json({ message: '"You are not the host of this meeting' });
         }
 
-        meeting.isActive = false;
+        meeting.status = false;
         meeting.status = "ended";
         await meeting.save();
         res.status(200).json({ message: "Meeting ended successfully", data: meeting });
